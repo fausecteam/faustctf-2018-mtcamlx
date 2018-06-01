@@ -1,0 +1,6 @@
+*.dyn_*
+*.hi
+*.json
+*.o
+*~
+frontend

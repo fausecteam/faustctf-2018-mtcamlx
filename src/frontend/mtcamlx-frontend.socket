@@ -1,0 +1,10 @@
+[Unit]
+Description=FAUST CTF helloworld service
+
+[Socket]
+ListenStream=7777
+Accept=true
+
+[Install]
+WantedBy=sockets.target
+

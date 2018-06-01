@@ -1,0 +1,7 @@
+*.cmi
+*.cmo
+*.cmx
+*.json
+*.o
+*~
+messages

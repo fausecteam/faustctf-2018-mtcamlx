@@ -1,0 +1,14 @@
+[Unit]
+Description=MtCamlX Trading Microservice
+
+[Service]
+Type=simple
+ExecStart=/srv/mtcamlx/trading/trading
+Restart=on-failure
+User=mtcamlx-trading
+Group=mtcamlx
+WorkingDirectory=/srv/mtcamlx/trading/data
+PrivateTmp=yes
+
+[Install]
+WantedBy=multi-user.target

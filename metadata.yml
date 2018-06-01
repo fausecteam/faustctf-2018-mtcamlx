@@ -1,0 +1,40 @@
+name: MtCamlX
+slug: mtcamlx
+authors:
+  - Christoph Egger <egger@cs.fau.de>
+
+install:
+  debian_packages:
+    - telnetd
+    - libev4
+    - sqlite3
+  postinst_commands:
+    - systemctl disable inetd
+    - systemctl enable mtcamlx-frontend.socket
+    - systemctl enable mtcamlx-messages.service
+    - systemctl enable mtcamlx-trading.service
+    - systemctl enable mtcamlx-authentication.service
+    - systemctl enable mtcamlx-keygen.service
+    - adduser --system --home /srv/mtcamlx/trading        --ingroup mtcamlx --disabled-login --no-create-home mtcamlx-trading
+    - mkdir -p /srv/mtcamlx/trading/data
+    - chown mtcamlx-trading:adm /srv/mtcamlx/trading/data
+    - chmod 750 /srv/mtcamlx/trading/data
+    - adduser --system --home /srv/mtcamlx/authentication --ingroup mtcamlx --disabled-login --no-create-home mtcamlx-authentication
+    - mkdir -p /srv/mtcamlx/authentication/data
+    - chown mtcamlx-authentication:adm /srv/mtcamlx/authentication/data
+    - chmod 750 /srv/mtcamlx/authentication/data
+    - adduser --system --home /srv/mtcamlx/messages       --ingroup mtcamlx --disabled-login --no-create-home mtcamlx-messages
+    - mkdir -p /srv/mtcamlx/messages/data
+    - chown mtcamlx-messages:adm /srv/mtcamlx/messages/data
+    - chmod 750 /srv/mtcamlx/messages/data
+    - mkdir -p /srv/mtcamlx/frontend/data
+    - chown mtcamlx:adm /srv/mtcamlx/frontend/data
+    - chmod 750 /srv/mtcamlx/frontend/data
+  prevent_outgoing_connections: True
+
+checker:
+  module: mtcamlx
+  class: MtCamlXChecker
+  debian_packages:
+    - python3-pexpect
+    - telnet

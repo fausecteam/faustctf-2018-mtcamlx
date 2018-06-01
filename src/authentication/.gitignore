@@ -1,0 +1,8 @@
+*.cmi
+*.cmo
+*.cmx
+*.json
+*.o
+*~
+authentication
+keygen

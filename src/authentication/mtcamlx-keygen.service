@@ -1,0 +1,24 @@
+[Unit]
+Description=MtCamlX Keygen
+Before=mtcamlx-autentication.service
+Before=mtcamlx-messages.service
+Before=mtcamlx-trading.service
+ConditionPathExists=!/src/mtcamlx/authentication/data/secret.json
+
+[Service]
+Type=oneshot
+WorkingDirectory=/srv/mtcamlx/
+ExecStart=/srv/mtcamlx/keygen serverParam authentication/data/secret.json
+ExecStart=/srv/mtcamlx/keygen clientParam messages/data/secret.json
+ExecStart=/srv/mtcamlx/keygen clientParam frontend/data/secret.json
+ExecStart=/srv/mtcamlx/keygen clientParam trading/data/secret.json
+ExecStart=/srv/mtcamlx/keygen publicParam authentication/data/public.json authentication/data/secret.json
+ExecStart=/srv/mtcamlx/keygen publicParam messages/data/public.json       authentication/data/secret.json
+ExecStart=/srv/mtcamlx/keygen publicParam frontend/data/public.json       authentication/data/secret.json
+ExecStart=/srv/mtcamlx/keygen publicParam trading/data/public.json        authentication/data/secret.json
+ExecStart=/srv/mtcamlx/keygen schnorrPublic messages/data/schnorr.json       trading/data/secret.json frontend/data/secret.json messages/data/secret.json
+ExecStart=/srv/mtcamlx/keygen schnorrPublic trading/data/schnorr.json        trading/data/secret.json frontend/data/secret.json messages/data/secret.json
+ExecStart=/srv/mtcamlx/keygen schnorrPublic authentication/data/schnorr.json trading/data/secret.json frontend/data/secret.json messages/data/secret.json
+
+[Install]
+WantedBy=multi-user.target

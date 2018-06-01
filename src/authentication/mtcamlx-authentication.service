@@ -1,0 +1,14 @@
+[Unit]
+Description=MtCamlX Authentication Microservice
+
+[Service]
+Type=simple
+ExecStart=/srv/mtcamlx/authentication/authentication
+Restart=on-failure
+User=mtcamlx-authentication
+Group=mtcamlx
+WorkingDirectory=/srv/mtcamlx/authentication/data
+PrivateTmp=yes
+
+[Install]
+WantedBy=multi-user.target

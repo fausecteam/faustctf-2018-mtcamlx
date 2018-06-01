@@ -1,0 +1,14 @@
+[Unit]
+Description=MtCamlX Messages Microservice
+
+[Service]
+Type=simple
+ExecStart=/srv/mtcamlx/messages/messages
+Restart=on-failure
+User=mtcamlx-messages
+Group=mtcamlx
+WorkingDirectory=/srv/mtcamlx/messages/data
+PrivateTmp=yes
+
+[Install]
+WantedBy=multi-user.target

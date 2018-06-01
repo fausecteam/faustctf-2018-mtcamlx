@@ -1,0 +1,10 @@
+*.a
+*.cache
+*.cmi
+*.cmo
+*.cmx
+*.cmxa
+*.log
+*.o
+*~
+test

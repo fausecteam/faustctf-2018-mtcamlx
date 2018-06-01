@@ -1,0 +1,56 @@
+stages:
+  - build
+  - upload
+
+build_job:
+  stage: build
+  image: "debian:stretch"
+  before_script:
+    - mkdir -p "$CI_PROJECT_DIR/.apt"
+    - mkdir -p "$CI_PROJECT_DIR/.cabal"
+    - apt -o dir::cache="$CI_PROJECT_DIR/.apt" -yqq update
+    - apt -o dir::cache="$CI_PROJECT_DIR/.apt" -yqq install eatmydata
+    - eatmydata apt -o dir::cache="$CI_PROJECT_DIR/.apt" -yqq install ocaml libfieldslib-ocaml-dev libfindlib-ocaml-dev libhttp-ocaml-dev libzarith-ocaml-dev libyojson-ocaml-dev libsha-ocaml-dev make libounit-ocaml-dev libsqlexpr-ocaml-dev
+    - apt -o dir::cache="$CI_PROJECT_DIR/.apt" -yqq install ghc cabal-install
+    - HOME="$CI_PROJECT_DIR" eatmydata cabal update
+    - HOME="$CI_PROJECT_DIR" eatmydata cabal install aeson
+    - HOME="$CI_PROJECT_DIR" eatmydata cabal install microlens-platform
+    - HOME="$CI_PROJECT_DIR" eatmydata cabal install aeson-pretty
+    - HOME="$CI_PROJECT_DIR" eatmydata cabal install lens-aeson
+    - HOME="$CI_PROJECT_DIR" eatmydata cabal install brick
+    - HOME="$CI_PROJECT_DIR" eatmydata cabal install wreq
+    - HOME="$CI_PROJECT_DIR" eatmydata cabal install cryptonite
+    - HOME="$CI_PROJECT_DIR" eatmydata cabal install happy
+    - HOME="$CI_PROJECT_DIR" eatmydata cabal install persistent-sqlite
+    - HOME="$CI_PROJECT_DIR" eatmydata cabal install persistent-template
+
+  cache:
+    paths:
+      - .apt/
+      - .cabal/
+  script: make install
+  artifacts:
+    paths:
+      - metadata.yml
+      - dist_root/
+  only:
+    - master
+  tags:
+    - faust
+    - docker
+
+upload_job:
+  stage: upload
+  script:
+    - ssh ci-upload@www.faust.cs.fau.de mkdir -p "/var/www/files/internal/ci/faustctf/2018/$CI_PROJECT_NAME"
+    - tar -v -czp -H posix -f dist_root.tar.gz -C dist_root .
+    - scp metadata.yml dist_root.tar.gz "ci-upload@www.faust.cs.fau.de:/var/www/files/internal/ci/faustctf/2018/$CI_PROJECT_NAME/"
+  after_script:
+    - find "$CI_PROJECT_DIR" -mindepth 1 -delete
+  variables:
+    GIT_STRATEGY: none
+  only:
+    - master
+  tags:
+    - faust
+    - www-upload

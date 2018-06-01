@@ -1,0 +1,12 @@
+[Unit]
+Description=FAUST CTF helloworld service
+
+[Service]
+ExecStart=/usr/sbin/in.telnetd -L /srv/mtcamlx/frontend/frontend.sh
+WorkingDirectory=/srv/mtcamlx/frontend/data
+PrivateTmp=yes
+StandardInput=socket
+StandardOutput=socket
+User=mtcamlx
+LimitNPROC=100
+LimitCPU=60
